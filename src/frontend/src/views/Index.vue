@@ -11,14 +11,14 @@
             <div class="sheet__content dough">
               <label
                 class="dough__input"
-                :class="getDoughPizza(item.name)"
+                :class="`dough__input--${item.value}`"
                 v-for="item in dough"
                 :key="item.id"
               >
                 <input
                   type="radio"
                   name="dought"
-                  value="light"
+                  :value="item.value"
                   class="visually-hidden"
                   checked
                 />
@@ -36,14 +36,14 @@
             <div class="sheet__content diameter">
               <label
                 class="diameter__input"
-                :class="getDiameterPizza(item.multiplier)"
+                :class="`diameter__input--${item.value}`"
                 v-for="item in sizes"
                 :key="item.id"
               >
                 <input
                   type="radio"
                   name="diameter"
-                  value="small"
+                  :value="item.value"
                   class="visually-hidden"
                 />
                 <span>{{ item.name }}</span>
@@ -67,7 +67,12 @@
                   v-for="item in sauces"
                   :key="item.id"
                 >
-                  <input type="radio" name="sauce" value="tomato" checked />
+                  <input
+                    type="radio"
+                    name="sauce"
+                    :value="item.value"
+                    checked
+                  />
                   <span>{{ item.name }}</span>
                 </label>
               </div>
@@ -81,10 +86,7 @@
                     v-for="item in ingredients"
                     :key="item.id"
                   >
-                    <span
-                      class="filling"
-                      :class="getClassNameIngredient(item.image)"
-                    >
+                    <span class="filling" :class="`filling--${item.value}`">
                       {{ item.name }}
                     </span>
 
@@ -151,47 +153,28 @@ import misc from "@/static/misc.json";
 import pizza from "@/static/pizza.json";
 import user from "@/static/user.json";
 
+import {
+  DOUGH_TYPES,
+  SIZE_TYPES,
+  SAUCE_TYPES,
+  INGREDIENT_TYPES,
+} from "@/common/constants";
+
+import { normalizePizza } from "@/common/helpers";
+
 export default {
   name: "Index",
   data() {
     return {
       misc: misc,
       user: user,
-      dough: pizza.dough,
-      sizes: pizza.sizes,
-      sauces: pizza.sauces,
-      ingredients: pizza.ingredients,
+      dough: pizza.dough.map((item) => normalizePizza(item, DOUGH_TYPES)),
+      sizes: pizza.sizes.map((item) => normalizePizza(item, SIZE_TYPES)),
+      sauces: pizza.sauces.map((item) => normalizePizza(item, SAUCE_TYPES)),
+      ingredients: pizza.ingredients.map((item) =>
+        normalizePizza(item, INGREDIENT_TYPES)
+      ),
     };
-  },
-  methods: {
-    getDiameterPizza(multiplier) {
-      switch (multiplier) {
-        case 1:
-          return "diameter__input--small";
-        case 2:
-          return "diameter__input--normal";
-        case 3:
-          return "diameter__input--big";
-        default:
-          alert("error get size");
-      }
-    },
-    getDoughPizza(name) {
-      switch (name) {
-        case "Тонкое":
-          return "dough__input--light";
-        case "Толстое":
-          return "dough__input--large";
-        default:
-          alert("error get dough");
-      }
-    },
-    getClassNameIngredient(image) {
-      return (
-        "filling--" +
-        image.replace(".svg", "").replace("/public/img/filling/", "")
-      );
-    },
   },
 };
 </script>
