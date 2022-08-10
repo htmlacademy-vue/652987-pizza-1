@@ -6,14 +6,14 @@
 </template>
 
 <script>
-import AppLayoutHeader from '@/layouts/AppLayoutHeader';
-import Index from '@/views/Index';
+import AppLayoutHeader from "@/layouts/AppLayoutHeader";
+import Index from "@/views/Index";
 
 export default {
-  name: 'AppLayout',
+  name: "AppLayout",
   components: {
     AppLayoutHeader,
-    Index
-  }
+    Index,
+  },
 };
 </script>
