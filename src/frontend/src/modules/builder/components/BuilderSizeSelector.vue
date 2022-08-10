@@ -10,6 +10,7 @@
         :value="item.value"
         :classRadioLabel="`diameter__input diameter__input--${item.value}`"
         :classRadioInput="`visually-hidden`"
+        :isChecked="item.value === checked"
         @change="
           $emit('selectSize', {
             size: item.value,
@@ -32,6 +33,9 @@ export default {
     sizes: {
       type: Array,
       required: true,
+    },
+    checked: {
+      type: String,
     },
   },
 };

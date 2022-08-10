@@ -98,6 +98,6 @@ export const INGREDIENT_TYPES = [
   },
 ];
 
-export const MOVE = 'move';
-export const TAG_SEPARATOR = '#';
-export const DATA_TRANSFER_PAYLOAD = 'payload';
+export const MOVE = "move";
+export const TAG_SEPARATOR = "#";
+export const DATA_TRANSFER_PAYLOAD = "payload";

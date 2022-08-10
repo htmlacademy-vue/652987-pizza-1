@@ -10,10 +10,14 @@
           v-for="item in sauces"
           :key="item.id"
           :name="`sauces`"
+          :isChecked="item.value === checked"
           :value="item.value"
           :classRadioLabel="`radio ingredients__input`"
           @change="
-            $emit('selectSauce', { sauce: item.value, price: item.price })
+            $emit('selectSauce', {
+              sauce: item.value,
+              price: item.price,
+            })
           "
         >
           <span>{{ item.name }}</span>
@@ -72,9 +76,12 @@ export default {
       type: Array,
       required: true,
     },
+    checked: {
+      type: String,
+    },
     selectedIngredients: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
   methods: {

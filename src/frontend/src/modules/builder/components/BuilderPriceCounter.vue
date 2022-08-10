@@ -1,11 +1,7 @@
 <template>
   <div class="content__result">
     <p>Итого: {{ totalPrice }} ₽</p>
-    <button
-      type="button"
-      class="button"
-      :disabled="isDisabled"
-    >
+    <button type="button" class="button" :disabled="isDisabled">
       Готовьте!
     </button>
   </div>
@@ -52,7 +48,7 @@ export default {
         this.isNameFilled &&
         this.isPizzaSelected
       );
-    }
+    },
   },
 };
 </script>

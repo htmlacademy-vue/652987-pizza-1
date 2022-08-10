@@ -8,9 +8,15 @@
         :key="item.id"
         :name="`dough`"
         :value="item.value"
-        :classRadioLabel="`dough__input dough__input--${item.value}`"
+        :isChecked="item.value === checked"
+        :class="`dough__input dough__input--${item.value}`"
         :classRadioInput="`visually-hidden`"
-        @change="$emit('selectDough', { type: item.value, price: item.price })"
+        @change="
+          $emit('selectDough', {
+            type: item.value,
+            price: item.price,
+          })
+        "
       >
         <b>{{ item.name }}</b>
         <span>{{ item.description }}</span>
@@ -29,6 +35,9 @@ export default {
     dough: {
       type: Array,
       required: true,
+    },
+    checked: {
+      type: String,
     },
   },
 };

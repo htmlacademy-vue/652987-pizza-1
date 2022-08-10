@@ -8,6 +8,7 @@
           <BuilderDoughSelector
             v-if="dough.length"
             :dough="dough"
+            :checked="selectedDough.type"
             @selectDough="selectedDough = $event"
           />
         </div>
@@ -16,6 +17,7 @@
           <BuilderSizeSelector
             v-if="sizes.length"
             :sizes="sizes"
+            :checked="selectedSize.size"
             @selectSize="selectedSize = $event"
           />
         </div>
@@ -25,6 +27,7 @@
             :sauces="sauces"
             :ingredients="ingredients"
             :selectedIngredients="selectedIngredients"
+            :checked="selectedSauce.sauce"
             @selectSauce="selectedSauce = $event"
             @selectIngredients="selectIngredients"
           />
@@ -81,9 +84,18 @@ export default {
       ingredients: pizza.ingredients.map((item) =>
         normalizePizza(item, INGREDIENT_TYPES)
       ),
-      selectedDough: {},
-      selectedSauce: {},
-      selectedSize: {},
+      selectedDough: {
+        type: "large",
+        price: 300,
+      },
+      selectedSauce: {
+        price: 50,
+        sauce: "creamy",
+      },
+      selectedSize: {
+        multiplier: 2,
+        size: "normal",
+      },
       selectedIngredients: {},
     };
   },
@@ -96,7 +108,7 @@ export default {
     },
     addIngredient(ingredientName) {
       if (this.selectedIngredients[ingredientName]) {
-        console.log(this.selectedIngredients[ingredientName] + 1)
+        console.log(this.selectedIngredients[ingredientName] + 1);
         this.$set(
           this.selectedIngredients,
           ingredientName,

@@ -5,6 +5,7 @@
       :name="name"
       :value="value"
       :class="classRadioInput"
+      :checked="isChecked"
       @change="$emit('change', $event.target.value)"
     />
     <slot></slot>
@@ -14,10 +15,6 @@
 <script>
 export default {
   name: "RadioButton",
-  model: {
-    prop: "checked",
-    event: "change",
-  },
   props: {
     classRadioLabel: {
       type: String,
@@ -27,6 +24,9 @@ export default {
       type: String,
       required: false,
     },
+    isChecked: {
+      type: Boolean,
+    },
     name: {
       type: String,
       required: true,
@@ -35,8 +35,8 @@ export default {
       type: String,
       required: true,
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped></style>
