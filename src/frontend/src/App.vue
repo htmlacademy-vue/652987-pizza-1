@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <AppLayout />
+    <AppLayout :price="totalPrice" :userData="userData">
+      <router-view @updateTotalPrice="updateTotalPrice" />
+    </AppLayout>
   </div>
 </template>
 
@@ -10,6 +12,17 @@ import AppLayout from "@/layouts/AppLayout";
 export default {
   name: "App",
   components: { AppLayout },
+  data() {
+    return {
+      userData: true,
+      totalPrice: 0,
+    };
+  },
+  methods: {
+    updateTotalPrice(price) {
+      this.totalPrice = price;
+    },
+  },
 };
 </script>
 
