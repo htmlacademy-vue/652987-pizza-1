@@ -1,19 +1,31 @@
 <template>
   <div class="app-layout">
-    <AppLayoutHeader />
-    <Index />
+    <component :is="layout" :price="price" :userData="userData">
+      <slot />
+    </component>
   </div>
 </template>
 
 <script>
-import AppLayoutHeader from "@/layouts/AppLayoutHeader";
-import Index from "@/views/Index";
+const defaultLayout = "AppLayoutDefault";
 
 export default {
   name: "AppLayout",
-  components: {
-    AppLayoutHeader,
-    Index,
+  props: {
+    price: {
+      type: Number,
+      required: true,
+    },
+    userData: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  computed: {
+    layout() {
+      const layout = this.$route.meta.layout || defaultLayout;
+      return () => import(`@/layouts/${layout}.vue`);
+    },
   },
 };
 </script>
