@@ -3,10 +3,10 @@
     <input
       type="radio"
       :name="name"
-      :value="value"
+      :value="params.value"
+      :checked="checked"
       :class="classRadioInput"
-      :checked="isChecked"
-      @change="$emit('change', $event.target.value)"
+      @change="$emit('selected')"
     />
     <slot></slot>
   </label>
@@ -16,22 +16,23 @@
 export default {
   name: "RadioButton",
   props: {
-    classRadioLabel: {
-      type: String,
-      required: false,
+    checked: {
+      type: Boolean,
+      default: false,
+    },
+    params: {
+      type: Object,
+      required: true,
     },
     classRadioInput: {
       type: String,
       required: false,
     },
-    isChecked: {
-      type: Boolean,
+    classRadioLabel: {
+      type: String,
+      required: false,
     },
     name: {
-      type: String,
-      required: true,
-    },
-    value: {
       type: String,
       required: true,
     },

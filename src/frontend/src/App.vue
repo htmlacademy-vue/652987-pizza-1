@@ -1,13 +1,14 @@
 <template>
   <div id="app">
-    <AppLayout :price="totalPrice" :userData="userData">
-      <router-view @updateTotalPrice="updateTotalPrice" />
+    <AppLayout :price="totalCartPrice" :userData="userData">
+      <router-view />
     </AppLayout>
   </div>
 </template>
 
 <script>
 import AppLayout from "@/layouts/AppLayout";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
@@ -15,13 +16,10 @@ export default {
   data() {
     return {
       userData: true,
-      totalPrice: 0,
     };
   },
-  methods: {
-    updateTotalPrice(price) {
-      this.totalPrice = price;
-    },
+  computed: {
+    ...mapGetters("cart", ["totalCartPrice"]),
   },
 };
 </script>

@@ -4,22 +4,17 @@
 
     <div class="sheet__content dough">
       <RadioButton
-        v-for="item in dough"
-        :key="item.id"
+        v-for="dough in doughs"
+        :key="dough.id"
         :name="`dough`"
-        :value="item.value"
-        :isChecked="item.value === checked"
-        :class="`dough__input dough__input--${item.value}`"
-        :classRadioInput="`visually-hidden`"
-        @change="
-          $emit('selectDough', {
-            type: item.value,
-            price: item.price,
-          })
-        "
+        :params="dough"
+        :checked="order.dough === dough.id"
+        :class="`dough__input dough__input--${dough.value}`"
+        :class-radio-input="`visually-hidden`"
+        @selected="updateOrder(dough, 'dough')"
       >
-        <b>{{ item.name }}</b>
-        <span>{{ item.description }}</span>
+        <b>{{ dough.name }}</b>
+        <span>{{ dough.description }}</span>
       </RadioButton>
     </div>
   </div>
@@ -27,17 +22,25 @@
 
 <script>
 import RadioButton from "@/common/components/RadioButton";
+import { mapGetters, mapState, mapActions } from "vuex";
 
 export default {
   name: "BuilderDoughSelector",
   components: { RadioButton },
-  props: {
-    dough: {
-      type: Array,
-      required: true,
-    },
-    checked: {
-      type: String,
+  computed: {
+    ...mapState("builder", ["order"]),
+    ...mapGetters("builder", ["doughs"]),
+  },
+  methods: {
+    ...mapActions("builder", ["UPDATE_ORDER"]),
+    updateOrder(selected, type) {
+      this.UPDATE_ORDER([
+        {
+          value: selected.id,
+          name: type,
+          description: selected.name,
+        },
+      ]);
     },
   },
 };

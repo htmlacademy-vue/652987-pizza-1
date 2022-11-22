@@ -7,16 +7,11 @@
         v-for="item in sizes"
         :key="item.id"
         :name="`diameter`"
-        :value="item.value"
         :classRadioLabel="`diameter__input diameter__input--${item.value}`"
         :classRadioInput="`visually-hidden`"
-        :isChecked="item.value === checked"
-        @change="
-          $emit('selectSize', {
-            size: item.value,
-            multiplier: item.multiplier,
-          })
-        "
+        :params="item"
+        :checked="order.size === item.id"
+        @selected="updateOrder(item, 'diameter')"
       >
         <span>{{ item.name }}</span>
       </RadioButton>
@@ -26,16 +21,23 @@
 
 <script>
 import RadioButton from "@/common/components/RadioButton";
+import { mapActions, mapGetters, mapState } from "vuex";
 export default {
   name: "BuilderSizeSelector",
   components: { RadioButton },
-  props: {
-    sizes: {
-      type: Array,
-      required: true,
-    },
-    checked: {
-      type: String,
+  computed: {
+    ...mapState("builder", ["order"]),
+    ...mapGetters("builder", ["sizes"]),
+  },
+  methods: {
+    ...mapActions("builder", ["UPDATE_ORDER"]),
+    updateOrder(selected, type) {
+      this.UPDATE_ORDER([
+        {
+          value: selected.id,
+          name: type,
+        },
+      ]);
     },
   },
 };

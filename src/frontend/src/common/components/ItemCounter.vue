@@ -2,24 +2,29 @@
   <div class="counter counter--orange" :class="classCounter">
     <button
       type="button"
+      name="minus"
       class="counter__button counter__button--minus"
-      :disabled="!value"
-      @click="decreaseCounter"
+      :disabled="counterValue === 0"
+      @click="changeCounter"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
     <input
-      :name="['counter_' + name]"
       type="text"
+      :name="inputName"
       class="counter__input"
-      :value="value"
-      @input="conversionValue($event.target.value)"
+      :value="counterValue"
+      readonly
     />
     <button
       type="button"
-      class="counter__button counter__button--plus"
-      @click="increaseCounter"
-      :disabled="value >= 3"
+      name="plus"
+      :class="[
+        'counter__button counter__button--plus',
+        { 'counter__button--orange': orangeBtn },
+      ]"
+      :disabled="counterValue >= maxValue"
+      @click="changeCounter"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -34,29 +39,29 @@ export default {
       type: String,
       required: true,
     },
-    name: {
-      type: String,
-      required: true,
+    orangeBtn: {
+      type: Boolean,
+      default: false,
     },
-    value: {
+    counterValue: {
       type: Number,
       default: 0,
     },
-  },
-  watch: {
-    startValue(newVal) {
-      if (newVal >= 3) this.$emit("changeAmount", 3);
+    inputName: {
+      type: String,
+    },
+    maxValue: {
+      type: Number,
+      default: 3,
     },
   },
   methods: {
-    conversionValue(value) {
-      this.$emit("changeAmount", +value);
-    },
-    decreaseCounter() {
-      this.conversionValue(this.value - 1);
-    },
-    increaseCounter() {
-      this.conversionValue(this.value + 1);
+    changeCounter(event) {
+      this.$emit("updateOrder", {
+        buttonName: event.target.name,
+        inputName: this.inputName,
+        count: this.counterValue,
+      });
     },
   },
 };
