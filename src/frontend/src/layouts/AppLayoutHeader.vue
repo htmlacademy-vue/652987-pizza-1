@@ -11,10 +11,10 @@
       </router-link>
     </div>
     <div class="header__cart">
-      <router-link to="/cart"> {{ price }} ₽ </router-link>
+      <router-link to="/cart"> {{ totalCartPrice }} ₽ </router-link>
     </div>
     <div class="header__user">
-      <router-link v-if="userData" to="/profile">
+      <router-link v-if="user" to="/profile">
         <picture>
           <source
             type="image/webp"
@@ -31,9 +31,9 @@
             height="32"
           />
         </picture>
-        <span>Василий Ложкин</span>
+        <span>{{ user.name }}</span>
       </router-link>
-      <a v-if="userData" href="#" class="header__logout"><span>Выйти</span></a>
+      <a v-if="user" href="#" class="header__logout"><span>Выйти</span></a>
       <router-link v-else to="/login" class="header__login">
         <span>Войти</span>
       </router-link>
@@ -42,17 +42,13 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
+
 export default {
   name: "AppLayoutHeader",
-  props: {
-    price: {
-      type: Number,
-      required: true,
-    },
-    userData: {
-      type: Boolean,
-      required: true,
-    },
+  computed: {
+    ...mapState("auth", ["user"]),
+    ...mapGetters("cart", ["totalCartPrice"]),
   },
 };
 </script>

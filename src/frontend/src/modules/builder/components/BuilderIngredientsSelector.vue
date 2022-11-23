@@ -7,20 +7,15 @@
         <p>Основной соус:</p>
 
         <RadioButton
-          v-for="item in sauces"
-          :key="item.id"
-          :name="`sauces`"
-          :isChecked="item.value === checked"
-          :value="item.value"
-          :classRadioLabel="`radio ingredients__input`"
-          @change="
-            $emit('selectSauce', {
-              sauce: item.value,
-              price: item.price,
-            })
-          "
+          v-for="sauce in sauces"
+          :key="sauce.id"
+          :class-radio-label="`radio ingredients__input`"
+          :name="`sauce`"
+          :params="sauce"
+          :checked="order.sauce === sauce.id"
+          @selected="updateOrder(sauce, 'sauce')"
         >
-          <span>{{ item.name }}</span>
+          <span>{{ sauce.name }}</span>
         </RadioButton>
       </div>
 
@@ -34,8 +29,8 @@
             :key="item.id"
           >
             <AppDrag
-              :transfer-data="item.value"
-              :isDraggable="canDrag(selectedIngredients[item.value])"
+              :transfer-data="item"
+              :isDraggable="item.count < MAX_COUNT_INGREDIENT"
             >
               <span class="filling" :class="`filling--${item.value}`">
                 {{ item.name }}
@@ -43,10 +38,11 @@
             </AppDrag>
 
             <ItemCounter
-              :name="item.value"
               :classCounter="`ingredients__counter`"
-              :value="selectedIngredients[item.value]"
-              @changeAmount="selectIngredients($event, item.value)"
+              :inputName="item.value"
+              :id="item.id"
+              :counter-value="item.count"
+              @updateOrder="updateIngredients"
             />
           </li>
         </ul>
@@ -59,6 +55,9 @@
 import RadioButton from "@/common/components/RadioButton";
 import ItemCounter from "@/common/components/ItemCounter";
 import AppDrag from "@/common/components/AppDrag";
+import { mapGetters, mapActions, mapState } from "vuex";
+import { MAX_COUNT_INGREDIENT } from "@/common/constants";
+import { UPDATE_INGREDIENTS, UPDATE_ORDER } from "@/store/mutation-types";
 
 export default {
   name: "BuilderIngredientsSelector",
@@ -67,29 +66,34 @@ export default {
     ItemCounter,
     AppDrag,
   },
-  props: {
-    sauces: {
-      type: Array,
-      required: true,
-    },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    checked: {
-      type: String,
-    },
-    selectedIngredients: {
-      type: Object,
-      default: () => ({}),
-    },
+  data() {
+    return {
+      MAX_COUNT_INGREDIENT,
+    };
+  },
+  computed: {
+    ...mapState("builder", ["order"]),
+    ...mapGetters("builder", ["ingredients", "sauces"]),
   },
   methods: {
-    selectIngredients(amount, filling) {
-      this.$emit("selectIngredients", { [filling]: amount });
+    ...mapActions("builder", [UPDATE_INGREDIENTS, UPDATE_ORDER]),
+    updateIngredients(event) {
+      const updateItem = this.ingredients.find((id) => id === event.id);
+      if (updateItem) {
+        updateItem.count = event.count;
+      }
+      this.UPDATE_INGREDIENTS({
+        id: event.id,
+        count: event.count,
+      });
     },
-    canDrag(value) {
-      return typeof value === "undefined" || value < 3;
+    updateOrder(selected, type) {
+      this.UPDATE_ORDER([
+        {
+          value: selected.id,
+          name: type,
+        },
+      ]);
     },
   },
 };

@@ -98,6 +98,22 @@ export const INGREDIENT_TYPES = [
   },
 ];
 
+export const MISC_TYPES = [
+  {
+    name: "Cola-Cola 0,5 литра",
+    value: "cola",
+  },
+  {
+    name: "Острый соус",
+    value: "sauce",
+  },
+  {
+    name: "Картошка из печи",
+    value: "potato",
+  },
+];
+
 export const MOVE = "move";
 export const TAG_SEPARATOR = "#";
 export const DATA_TRANSFER_PAYLOAD = "payload";
+export const MAX_COUNT_INGREDIENT = 3;

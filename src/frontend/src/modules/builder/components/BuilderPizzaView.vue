@@ -6,42 +6,34 @@
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
-        v-model.trim="pizzaName"
+        :value="currentName"
+        @input="updatePizzaName"
       />
     </label>
 
-    <AppDrop @drop="addIngredient" class="content__constructor">
+    <AppDrop @drop="onDrop" class="content__constructor">
       <div
-        class="pizza"
-        :class="`pizza--foundation--${doughSize}-${selectedSauce.sauce}`"
+        :class="`pizza pizza--foundation--${currentDoughClass}-${currentSauceClass}`"
       >
         <div class="pizza__wrapper">
           <div
-            v-for="item in chosenIngredients"
-            :key="`${item.name}-${item.amount}`"
-            class="pizza__filling"
-            :class="[
-              `pizza__filling--${item.name}`,
-              showIngredientAmount(item.amount),
-            ]"
+            v-for="item in order.ingredients"
+            :key="`${item.name}-${item.count}`"
+            :class="['pizza__filling', `pizza__filling--${item.value}`]"
           ></div>
         </div>
       </div>
     </AppDrop>
 
-    <BuilderPriceCounter
-      :doughPrice="selectedDough.price"
-      :sizePrice="selectedSize.multiplier"
-      :saucePrice="selectedSauce.price"
-      :isNameFilled="!!pizzaName"
-      :ingredientsPrice="ingredientsPrice"
-    />
+    <BuilderPriceCounter />
   </div>
 </template>
 
 <script>
 import BuilderPriceCounter from "./BuilderPriceCounter";
 import AppDrop from "@/common/components/AppDrop";
+import { mapGetters, mapState, mapActions } from "vuex";
+import { SET_NAME_PIZZA, UPDATE_INGREDIENTS } from "@/store/mutation-types";
 
 export default {
   name: "BuilderPizzaView",
@@ -49,68 +41,25 @@ export default {
     BuilderPriceCounter,
     AppDrop,
   },
-  props: {
-    selectedDough: {
-      type: Object,
-      default: () => {},
-    },
-    selectedSize: {
-      type: Object,
-      default: () => {},
-    },
-    selectedSauce: {
-      type: Object,
-      default: () => {},
-    },
-    selectedIngredients: {
-      type: Object,
-      required: true,
-    },
-    allIngredients: {
-      type: Array,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      pizzaName: "",
-    };
-  },
   computed: {
-    doughSize() {
-      return this.selectedDough.type === "light" ? "small" : "big";
-    },
-    chosenIngredients() {
-      const amount = [];
-      Object.keys(this.selectedIngredients).forEach((item) => {
-        for (let i = 0; i < this.selectedIngredients[item]; i++) {
-          amount.push({ name: item, amount: i + 1 });
-        }
-      });
-      return amount;
-    },
-    ingredientsPrice() {
-      return Object.entries(this.selectedIngredients).reduce((result, item) => {
-        const price =
-          this.allIngredients.find((ingredient) => ingredient.value === item[0])
-            .price * item[1];
-        return (result += price);
-      }, 0);
-    },
+    ...mapState("builder", ["order"]),
+    ...mapGetters("builder", [
+      "currentName",
+      "currentDoughClass",
+      "currentSauceClass",
+    ]),
   },
   methods: {
-    showIngredientAmount(amount) {
-      switch (amount) {
-        case 2:
-          return "pizza__filling--second";
-        case 3:
-          return "pizza__filling--second pizza__filling--third";
-        default:
-          return "";
-      }
+    ...mapActions("builder", [SET_NAME_PIZZA, UPDATE_INGREDIENTS]),
+    updatePizzaName(event) {
+      this.SET_NAME_PIZZA(event.target.value);
     },
-    addIngredient(ingredient) {
-      this.$emit("updateIngredients", ingredient);
+    onDrop(event) {
+      let newCount = (event.count += 1);
+      this.UPDATE_INGREDIENTS({
+        id: event.id,
+        count: newCount,
+      });
     },
   },
 };

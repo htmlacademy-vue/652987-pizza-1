@@ -5,43 +5,19 @@
         <h1 class="title title--big">Конструктор пиццы</h1>
 
         <div class="content__dough">
-          <BuilderDoughSelector
-            v-if="dough.length"
-            :dough="dough"
-            :checked="selectedDough.type"
-            @selectDough="selectedDough = $event"
-          />
+          <BuilderDoughSelector />
         </div>
 
         <div class="content__diameter">
-          <BuilderSizeSelector
-            v-if="sizes.length"
-            :sizes="sizes"
-            :checked="selectedSize.size"
-            @selectSize="selectedSize = $event"
-          />
+          <BuilderSizeSelector />
         </div>
 
         <div class="content__ingredients">
-          <BuilderIngredientsSelector
-            :sauces="sauces"
-            :ingredients="ingredients"
-            :selectedIngredients="selectedIngredients"
-            :checked="selectedSauce.sauce"
-            @selectSauce="selectedSauce = $event"
-            @selectIngredients="selectIngredients"
-          />
+          <BuilderIngredientsSelector />
         </div>
 
         <div class="content__pizza">
-          <BuilderPizzaView
-            :selected-dough="selectedDough"
-            :selected-sauce="selectedSauce"
-            :selectedSize="selectedSize"
-            :selectedIngredients="selectedIngredients"
-            :allIngredients="ingredients"
-            @updateIngredients="addIngredient"
-          />
+          <BuilderPizzaView />
         </div>
       </div>
     </form>
@@ -50,21 +26,13 @@
 
 <script>
 import misc from "@/static/misc.json";
-import pizza from "@/static/pizza.json";
 import user from "@/static/user.json";
 import BuilderDoughSelector from "../modules/builder/components/BuilderDoughSelector";
 import BuilderSizeSelector from "../modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector";
 import BuilderPizzaView from "../modules/builder/components/BuilderPizzaView";
-
-import {
-  DOUGH_TYPES,
-  SIZE_TYPES,
-  SAUCE_TYPES,
-  INGREDIENT_TYPES,
-} from "@/common/constants";
-
-import { normalizePizza } from "@/common/helpers";
+import { mapActions } from "vuex";
+import { SET_CART_ITEMS } from "@/store/mutation-types";
 
 export default {
   name: "Index",
@@ -78,45 +46,15 @@ export default {
     return {
       misc: misc,
       user: user,
-      dough: pizza.dough.map((item) => normalizePizza(item, DOUGH_TYPES)),
-      sizes: pizza.sizes.map((item) => normalizePizza(item, SIZE_TYPES)),
-      sauces: pizza.sauces.map((item) => normalizePizza(item, SAUCE_TYPES)),
-      ingredients: pizza.ingredients.map((item) =>
-        normalizePizza(item, INGREDIENT_TYPES)
-      ),
-      selectedDough: {
-        type: "large",
-        price: 300,
-      },
-      selectedSauce: {
-        price: 50,
-        sauce: "creamy",
-      },
-      selectedSize: {
-        multiplier: 2,
-        size: "normal",
-      },
-      selectedIngredients: {},
     };
   },
+  created() {
+    this.setCartItems();
+  },
   methods: {
-    selectIngredients(ingredientSet) {
-      this.selectedIngredients = {
-        ...this.selectedIngredients,
-        ...ingredientSet,
-      };
-    },
-    addIngredient(ingredientName) {
-      if (this.selectedIngredients[ingredientName]) {
-        console.log(this.selectedIngredients[ingredientName] + 1);
-        this.$set(
-          this.selectedIngredients,
-          ingredientName,
-          this.selectedIngredients[ingredientName] + 1
-        );
-      } else {
-        this.$set(this.selectedIngredients, ingredientName, 1);
-      }
+    ...mapActions("cart", [SET_CART_ITEMS]),
+    setCartItems() {
+      this.SET_CART_ITEMS();
     },
   },
 };

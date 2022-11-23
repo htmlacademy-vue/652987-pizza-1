@@ -1,53 +1,32 @@
 <template>
   <div class="content__result">
     <p>Итого: {{ totalPrice }} ₽</p>
-    <button type="button" class="button" :disabled="isDisabled">
+    <button
+      type="button"
+      class="button"
+      :disabled="isDisabledButton"
+      @click="sendOrder"
+    >
       Готовьте!
     </button>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import { ADD_TO_CART, RESET_BUILDER_STATE } from "@/store/mutation-types";
+
 export default {
   name: "BuilderPriceCounter",
-  props: {
-    doughPrice: {
-      type: Number,
-      default: 0,
-    },
-    sizePrice: {
-      type: Number,
-      default: 0,
-    },
-    saucePrice: {
-      type: Number,
-      default: 0,
-    },
-    isNameFilled: {
-      type: Boolean,
-      default: false,
-    },
-    ingredientsPrice: {
-      type: Number,
-      default: 0,
-    },
-  },
   computed: {
-    totalPrice() {
-      return (
-        (this.doughPrice + this.saucePrice + this.ingredientsPrice) *
-        this.sizePrice
-      );
-    },
-    isPizzaSelected() {
-      return this.saucePrice && this.sizePrice && this.doughPrice;
-    },
-    isDisabled() {
-      return !(
-        this.ingredientsPrice &&
-        this.isNameFilled &&
-        this.isPizzaSelected
-      );
+    ...mapGetters("builder", ["isDisabledButton", "totalPrice"]),
+  },
+  methods: {
+    ...mapActions("cart", [ADD_TO_CART]),
+    ...mapMutations("builder", [RESET_BUILDER_STATE]),
+    sendOrder() {
+      this.ADD_TO_CART();
+      this.RESET_BUILDER_STATE();
     },
   },
 };
