@@ -33,6 +33,7 @@
 import BuilderPriceCounter from "./BuilderPriceCounter";
 import AppDrop from "@/common/components/AppDrop";
 import { mapGetters, mapState, mapActions } from "vuex";
+import { SET_NAME_PIZZA, UPDATE_INGREDIENTS } from "@/store/mutation-types";
 
 export default {
   name: "BuilderPizzaView",
@@ -49,13 +50,15 @@ export default {
     ]),
   },
   methods: {
-    ...mapActions("builder", ["GET_NAME_PIZZA", "UPDATE_INGREDIENTS"]),
+    ...mapActions("builder", [SET_NAME_PIZZA, UPDATE_INGREDIENTS]),
     updatePizzaName(event) {
-      this.GET_NAME_PIZZA(event.target.value);
+      this.SET_NAME_PIZZA(event.target.value);
     },
-    onDrop(ingredient) {
+    onDrop(event) {
+      let newCount = (event.count += 1);
       this.UPDATE_INGREDIENTS({
-        inputName: ingredient,
+        id: event.id,
+        count: newCount,
       });
     },
   },

@@ -1,17 +1,19 @@
 import {
   ADD_TO_CART,
-  UPDATE_MICS,
+  UPDATE_MISC,
   UPDATE_CART_ORDER,
   RESET_CART_STATE,
   SET_CART_ITEMS,
+  DELETE_ITEM_CART,
 } from "../mutation-types.js";
-import mics from "@/static/misc.json";
-import { normalizePizza, setCartItems, getCartItems } from "@/common/helpers";
-import { MICS_TYPES } from "@/common/constants";
+import misc from "@/static/misc.json";
+import { normalizePizza } from "@/common/helpers";
+import { MISC_TYPES } from "@/common/constants";
+import { localeStorageService } from "@/services/localeStorage";
 
 const initialState = () => ({
   orders: [],
-  mics: mics.map((item) => normalizePizza(item, MICS_TYPES)),
+  misc: misc.map((item) => normalizePizza(item, MISC_TYPES)),
 });
 
 export default {
@@ -19,29 +21,21 @@ export default {
   state: initialState(),
   getters: {
     orders(state) {
-      if (state.orders.length) {
-        state.orders.forEach((item, index) => {
-          if (item.count === 0) {
-            state.orders.splice(index, 1);
-            setCartItems("orders", state.orders);
-          }
-        });
-      }
       return state.orders;
     },
-    mics(state) {
-      return state.mics;
+    misc(state) {
+      return state.misc;
     },
-    micsPrice(state) {
-      if (state.mics.length > 0) {
-        let micsPrices = 0;
+    miscPrice(state) {
+      if (state.misc.length > 0) {
+        let miscPrices = 0;
 
-        micsPrices = state.mics
+        miscPrices = state.misc
           .map((item) => item.count * item.price)
           .reduce(
             (previousValue, currentValue) => previousValue + currentValue
           );
-        return micsPrices;
+        return miscPrices;
       }
 
       return 0;
@@ -61,9 +55,9 @@ export default {
       return 0;
     },
     totalCartPrice(state, getters) {
-      if (state.orders.length === 0) return 0;
+      if (!state.orders.length) return 0;
 
-      return getters.micsPrice + getters.cardsPrice;
+      return getters.miscPrice + getters.cardsPrice;
     },
   },
   mutations: {
@@ -75,36 +69,41 @@ export default {
       });
       state.orders.push(order);
     },
-    [UPDATE_MICS](state, name) {
-      state.mics.forEach((item) => {
-        if (name.buttonName === "minus") {
-          if (item.value === name.inputName) {
-            item.count -= 1;
-          }
-        } else {
-          if (item.value === name.inputName) {
-            item.count += 1;
-          }
+    [UPDATE_MISC](state, name) {
+      state.misc.forEach((item) => {
+        if (item.id === name.id) {
+          item.count = name.count;
         }
       });
     },
     [UPDATE_CART_ORDER](state, name) {
       state.orders.forEach((item) => {
-        if (name.buttonName === "minus") {
-          if (item.name === name.inputName) {
-            item.count -= 1;
-          }
-        } else {
-          if (item.name === name.inputName) {
-            item.count += 1;
-          }
+        if (item.name === name.name) {
+          item.count = name.count;
         }
       });
     },
     [SET_CART_ITEMS](state) {
-      state.orders = getCartItems("orders");
-      if (localStorage.getItem("mics") !== null) {
-        state.mics = getCartItems("mics");
+      state.orders = localeStorageService.getJSON("orders");
+      if (localStorage.getItem("misc") !== null) {
+        state.misc = localeStorageService.getJSON("misc");
+      }
+    },
+    [RESET_CART_STATE](state) {
+      Object.assign(state, initialState());
+    },
+    [DELETE_ITEM_CART](state) {
+      if (state.orders.length) {
+        state.orders.forEach((item, index) => {
+          if (item.count === 0) {
+            state.orders.splice(index, 1);
+            localeStorageService.setJSON("orders", state.orders);
+
+            if (!state.orders.length) {
+              localeStorageService.setJSON("misc", initialState().misc);
+            }
+          }
+        });
       }
     },
   },
@@ -119,21 +118,24 @@ export default {
         totalPrice: rootGetters["builder/totalPrice"],
         count: 1,
       });
-      setCartItems("orders", state.orders);
+      localeStorageService.setJSON("orders", state.orders);
     },
-    [UPDATE_MICS]({ state, commit }, newValue) {
-      commit(UPDATE_MICS, newValue);
-      setCartItems("mics", state.mics);
+    [UPDATE_MISC]({ state, commit }, newValue) {
+      commit(UPDATE_MISC, newValue);
+      localeStorageService.setJSON("misc", state.misc);
     },
     [UPDATE_CART_ORDER]({ state, commit }, newValue) {
       commit(UPDATE_CART_ORDER, newValue);
-      setCartItems("orders", state.orders);
+      localeStorageService.setJSON("orders", state.orders);
     },
-    [RESET_CART_STATE](state) {
-      Object.assign(state, initialState());
+    [RESET_CART_STATE]({ commit }) {
+      commit(RESET_CART_STATE, { root: true });
     },
     [SET_CART_ITEMS]({ commit }) {
-      commit("SET_CART_ITEMS");
+      commit(SET_CART_ITEMS);
+    },
+    [DELETE_ITEM_CART]({ commit }) {
+      commit(DELETE_ITEM_CART);
     },
   },
 };

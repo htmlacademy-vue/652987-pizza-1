@@ -14,6 +14,7 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
+import { ADD_TO_CART, RESET_BUILDER_STATE } from "@/store/mutation-types";
 
 export default {
   name: "BuilderPriceCounter",
@@ -21,8 +22,8 @@ export default {
     ...mapGetters("builder", ["isDisabledButton", "totalPrice"]),
   },
   methods: {
-    ...mapActions("cart", ["ADD_TO_CART"]),
-    ...mapMutations("builder", ["RESET_BUILDER_STATE"]),
+    ...mapActions("cart", [ADD_TO_CART]),
+    ...mapMutations("builder", [RESET_BUILDER_STATE]),
     sendOrder() {
       this.ADD_TO_CART();
       this.RESET_BUILDER_STATE();

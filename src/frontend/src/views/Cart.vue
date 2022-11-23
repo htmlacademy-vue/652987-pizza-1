@@ -33,8 +33,13 @@ import CartsCards from "@/modules/cart/CartsCards";
 import CartAdditional from "@/modules/cart/CartAdditional";
 import CartForm from "@/modules/cart/CartForm";
 import NewOrderPopup from "@/modules/modal/NewOrderPopup";
-
+import { localeStorageService } from "@/services/localeStorage";
 import { mapState, mapGetters, mapActions } from "vuex";
+import {
+  RESET_BUILDER_STATE,
+  RESET_CART_STATE,
+  SET_CART_ITEMS,
+} from "@/store/mutation-types";
 
 export default {
   name: "Cart",
@@ -61,8 +66,8 @@ export default {
     this.setCartItems();
   },
   methods: {
-    ...mapActions("builder", ["RESET_BUILDER_STATE"]),
-    ...mapActions("cart", ["RESET_CART_STATE", "SET_CART_ITEMS"]),
+    ...mapActions("builder", [RESET_BUILDER_STATE]),
+    ...mapActions("cart", [RESET_CART_STATE, SET_CART_ITEMS]),
     setCartItems() {
       this.SET_CART_ITEMS();
     },
@@ -76,9 +81,9 @@ export default {
       } else {
         this.$router.push({ name: "IndexHome" });
       }
-      localStorage.clear();
-      this.RESET_CART_STATE();
+      localeStorageService.clear();
       this.RESET_BUILDER_STATE();
+      this.RESET_CART_STATE();
     },
   },
 };

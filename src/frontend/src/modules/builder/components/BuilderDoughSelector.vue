@@ -23,6 +23,7 @@
 <script>
 import RadioButton from "@/common/components/RadioButton";
 import { mapGetters, mapState, mapActions } from "vuex";
+import { UPDATE_ORDER } from "@/store/mutation-types";
 
 export default {
   name: "BuilderDoughSelector",
@@ -32,7 +33,7 @@ export default {
     ...mapGetters("builder", ["doughs"]),
   },
   methods: {
-    ...mapActions("builder", ["UPDATE_ORDER"]),
+    ...mapActions("builder", [UPDATE_ORDER]),
     updateOrder(selected, type) {
       this.UPDATE_ORDER([
         {

@@ -22,6 +22,8 @@
 <script>
 import RadioButton from "@/common/components/RadioButton";
 import { mapActions, mapGetters, mapState } from "vuex";
+import { UPDATE_ORDER } from "@/store/mutation-types";
+
 export default {
   name: "BuilderSizeSelector",
   components: { RadioButton },
@@ -30,7 +32,7 @@ export default {
     ...mapGetters("builder", ["sizes"]),
   },
   methods: {
-    ...mapActions("builder", ["UPDATE_ORDER"]),
+    ...mapActions("builder", [UPDATE_ORDER]),
     updateOrder(selected, type) {
       this.UPDATE_ORDER([
         {

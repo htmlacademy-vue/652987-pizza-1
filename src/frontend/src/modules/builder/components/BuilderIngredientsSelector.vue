@@ -29,7 +29,7 @@
             :key="item.id"
           >
             <AppDrag
-              :transfer-data="item.value"
+              :transfer-data="item"
               :isDraggable="item.count < MAX_COUNT_INGREDIENT"
             >
               <span class="filling" :class="`filling--${item.value}`">
@@ -40,7 +40,8 @@
             <ItemCounter
               :classCounter="`ingredients__counter`"
               :inputName="item.value"
-              :counterValue="item.count"
+              :id="item.id"
+              :counter-value="item.count"
               @updateOrder="updateIngredients"
             />
           </li>
@@ -56,6 +57,7 @@ import ItemCounter from "@/common/components/ItemCounter";
 import AppDrag from "@/common/components/AppDrag";
 import { mapGetters, mapActions, mapState } from "vuex";
 import { MAX_COUNT_INGREDIENT } from "@/common/constants";
+import { UPDATE_INGREDIENTS, UPDATE_ORDER } from "@/store/mutation-types";
 
 export default {
   name: "BuilderIngredientsSelector",
@@ -74,11 +76,15 @@ export default {
     ...mapGetters("builder", ["ingredients", "sauces"]),
   },
   methods: {
-    ...mapActions("builder", ["UPDATE_INGREDIENTS", "UPDATE_ORDER"]),
+    ...mapActions("builder", [UPDATE_INGREDIENTS, UPDATE_ORDER]),
     updateIngredients(event) {
+      const updateItem = this.ingredients.find((id) => id === event.id);
+      if (updateItem) {
+        updateItem.count = event.count;
+      }
       this.UPDATE_INGREDIENTS({
-        buttonName: event.buttonName,
-        inputName: event.inputName,
+        id: event.id,
+        count: event.count,
       });
     },
     updateOrder(selected, type) {

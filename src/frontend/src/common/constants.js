@@ -98,7 +98,7 @@ export const INGREDIENT_TYPES = [
   },
 ];
 
-export const MICS_TYPES = [
+export const MISC_TYPES = [
   {
     name: "Cola-Cola 0,5 литра",
     value: "cola",

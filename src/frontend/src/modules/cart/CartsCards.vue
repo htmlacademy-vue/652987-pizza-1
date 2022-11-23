@@ -1,6 +1,6 @@
 <template>
   <ul class="cart-list sheet">
-    <li v-for="card in cards" :key="card.id" class="cart-list__item">
+    <li v-for="(card, index) in cards" :key="card.id" class="cart-list__item">
       <div class="product cart-list__product">
         <img
           src="@/assets/img/product.svg"
@@ -13,10 +13,10 @@
           <h2>{{ card.name }}</h2>
           <ul>
             <li>
-              {{ setSizeText(card.size) }}, {{ setDoughText(card.dough) }}
+              {{ getSizeText(card.size) }}, {{ getDoughText(card.dough) }}
             </li>
-            <li>Соус: {{ setSauceText(card.sauce) }}</li>
-            <li>Начинка: {{ setIngredientsList(card.ingredients) }}</li>
+            <li>Соус: {{ getSauceText(card.sauce) }}</li>
+            <li>Начинка: {{ getIngredientsList(card.ingredients) }}</li>
           </ul>
         </div>
       </div>
@@ -26,7 +26,8 @@
         :orange-btn="true"
         :max-value="10"
         :inputName="card.name"
-        :counterValue="card.count"
+        :counter-value="card.count"
+        :id="index"
         @updateOrder="updateAmount"
       />
 
@@ -50,6 +51,11 @@
 <script>
 import ItemCounter from "@/common/components/ItemCounter";
 import { mapActions } from "vuex";
+import {
+  CHANGE_ORDER,
+  DELETE_ITEM_CART,
+  UPDATE_CART_ORDER,
+} from "@/store/mutation-types";
 
 export default {
   name: "CartCards",
@@ -61,19 +67,21 @@ export default {
     },
   },
   methods: {
-    ...mapActions("cart", ["UPDATE_CART_ORDER"]),
-    ...mapActions("builder", ["CHANGE_ORDER"]),
+    ...mapActions("cart", [UPDATE_CART_ORDER, DELETE_ITEM_CART]),
+    ...mapActions("builder", [CHANGE_ORDER]),
     updateAmount(event) {
       this.UPDATE_CART_ORDER({
-        buttonName: event.buttonName,
-        inputName: event.inputName,
+        id: event.id,
+        count: event.count,
+        name: event.name,
       });
+      this.DELETE_ITEM_CART();
     },
     goToPizzaBuilder(pizza) {
       this.CHANGE_ORDER(pizza);
       this.$router.push("/");
     },
-    setSizeText(size) {
+    getSizeText(size) {
       switch (size) {
         case 1:
           return "23 см";
@@ -83,7 +91,7 @@ export default {
           return "45 см";
       }
     },
-    setDoughText(dough) {
+    getDoughText(dough) {
       switch (dough) {
         case 1:
           return "на тонком тесте";
@@ -91,7 +99,7 @@ export default {
           return "на толстом тесте";
       }
     },
-    setSauceText(sauce) {
+    getSauceText(sauce) {
       switch (sauce) {
         case 1:
           return "томатный";
@@ -99,7 +107,7 @@ export default {
           return "сливочный";
       }
     },
-    setIngredientsList(ingredients) {
+    getIngredientsList(ingredients) {
       return ingredients.map((item) => item.name.toLowerCase()).join(", ");
     },
   },

@@ -43,10 +43,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    counterValue: {
-      type: Number,
-      default: 0,
-    },
     inputName: {
       type: String,
     },
@@ -54,13 +50,27 @@ export default {
       type: Number,
       default: 3,
     },
+    counterValue: {
+      type: Number,
+      default: 0,
+    },
+    id: {
+      type: Number,
+      default: null,
+    },
   },
   methods: {
     changeCounter(event) {
+      let counterValue = this.counterValue;
+      if (event.target.name === "minus") {
+        counterValue -= 1;
+      } else {
+        counterValue += 1;
+      }
       this.$emit("updateOrder", {
-        buttonName: event.target.name,
-        inputName: this.inputName,
-        count: this.counterValue,
+        id: this.id,
+        count: counterValue,
+        name: this.inputName,
       });
     },
   },

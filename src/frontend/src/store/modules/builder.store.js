@@ -9,7 +9,7 @@ import {
 } from "@/common/constants";
 
 import {
-  GET_NAME_PIZZA,
+  SET_NAME_PIZZA,
   UPDATE_INGREDIENTS,
   UPDATE_ORDER,
   RESET_BUILDER_STATE,
@@ -40,8 +40,8 @@ export default {
   namespaced: true,
   state: initialState(),
   getters: {
-    mics(state) {
-      return state.mics;
+    misc(state) {
+      return state.misc;
     },
     doughs(state) {
       return state.doughs;
@@ -54,6 +54,9 @@ export default {
     },
     ingredients(state) {
       return state.ingredients;
+    },
+    currentId(state) {
+      return state.order.id;
     },
     currentDough(state) {
       return state.order.dough;
@@ -133,7 +136,7 @@ export default {
     },
   },
   mutations: {
-    [GET_NAME_PIZZA](state, pizzaName) {
+    [SET_NAME_PIZZA](state, pizzaName) {
       state.order.pizzaName = pizzaName;
     },
     [UPDATE_ORDER](state, newValues) {
@@ -151,14 +154,8 @@ export default {
     },
     [UPDATE_INGREDIENTS](state, name) {
       state.ingredients.forEach((item) => {
-        if (name.buttonName === "minus") {
-          if (item.value === name.inputName) {
-            item.count -= 1;
-          }
-        } else {
-          if (item.value === name.inputName) {
-            item.count += 1;
-          }
+        if (item.id === name.id) {
+          item.count = name.count;
         }
       });
       state.order.ingredients = state.ingredients.filter(
@@ -188,8 +185,8 @@ export default {
     },
   },
   actions: {
-    [GET_NAME_PIZZA]({ commit }, name) {
-      commit(GET_NAME_PIZZA, name);
+    [SET_NAME_PIZZA]({ commit }, name) {
+      commit(SET_NAME_PIZZA, name);
     },
     [UPDATE_ORDER]({ commit }, newValue) {
       commit(UPDATE_ORDER, newValue);

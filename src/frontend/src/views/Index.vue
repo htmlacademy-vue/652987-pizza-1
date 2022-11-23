@@ -32,6 +32,7 @@ import BuilderSizeSelector from "../modules/builder/components/BuilderSizeSelect
 import BuilderIngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector";
 import BuilderPizzaView from "../modules/builder/components/BuilderPizzaView";
 import { mapActions } from "vuex";
+import { SET_CART_ITEMS } from "@/store/mutation-types";
 
 export default {
   name: "Index",
@@ -51,7 +52,7 @@ export default {
     this.setCartItems();
   },
   methods: {
-    ...mapActions("cart", ["SET_CART_ITEMS"]),
+    ...mapActions("cart", [SET_CART_ITEMS]),
     setCartItems() {
       this.SET_CART_ITEMS();
     },
