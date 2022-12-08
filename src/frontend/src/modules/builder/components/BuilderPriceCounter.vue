@@ -13,8 +13,12 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
-import { ADD_TO_CART, RESET_BUILDER_STATE } from "@/store/mutation-types";
+import { mapGetters, mapActions } from "vuex";
+import {
+  ADD_TO_CART,
+  GET_PIZZA_PARTS,
+  RESET_BUILDER_STATE,
+} from "@/store/mutation-types";
 
 export default {
   name: "BuilderPriceCounter",
@@ -23,10 +27,11 @@ export default {
   },
   methods: {
     ...mapActions("cart", [ADD_TO_CART]),
-    ...mapMutations("builder", [RESET_BUILDER_STATE]),
+    ...mapActions("builder", [GET_PIZZA_PARTS, RESET_BUILDER_STATE]),
     sendOrder() {
       this.ADD_TO_CART();
       this.RESET_BUILDER_STATE();
+      this.GET_PIZZA_PARTS();
     },
   },
 };

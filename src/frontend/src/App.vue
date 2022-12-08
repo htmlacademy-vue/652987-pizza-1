@@ -9,6 +9,7 @@
 <script>
 import AppLayout from "@/layouts/AppLayout";
 import { mapGetters } from "vuex";
+import { setAuth } from "@/common/helpers";
 
 export default {
   name: "App",
@@ -20,6 +21,12 @@ export default {
   },
   computed: {
     ...mapGetters("cart", ["totalCartPrice"]),
+  },
+  created() {
+    if (this.$jwt.getToken()) {
+      setAuth(this.$store);
+    }
+    this.$store.dispatch("builder/GET_PIZZA_PARTS");
   },
 };
 </script>

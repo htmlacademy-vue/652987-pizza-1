@@ -5,15 +5,14 @@ import {
   RESET_CART_STATE,
   SET_CART_ITEMS,
   DELETE_ITEM_CART,
+  GET_MISC,
+  UPDATE_COUNT_MISC,
 } from "../mutation-types.js";
-import misc from "@/static/misc.json";
-import { normalizePizza } from "@/common/helpers";
-import { MISC_TYPES } from "@/common/constants";
 import { localeStorageService } from "@/services/localeStorage";
 
 const initialState = () => ({
   orders: [],
-  misc: misc.map((item) => normalizePizza(item, MISC_TYPES)),
+  misc: [],
 });
 
 export default {
@@ -69,10 +68,20 @@ export default {
       });
       state.orders.push(order);
     },
+    [GET_MISC](state, misc) {
+      state.misc = misc;
+    },
     [UPDATE_MISC](state, name) {
       state.misc.forEach((item) => {
         if (item.id === name.id) {
           item.count = name.count;
+        }
+      });
+    },
+    [UPDATE_COUNT_MISC](state, name) {
+      state.misc.forEach((item) => {
+        if (item.id === name.miscId) {
+          item.count = item.count + name.quantity;
         }
       });
     },
@@ -120,8 +129,17 @@ export default {
       });
       localeStorageService.setJSON("orders", state.orders);
     },
+    async [GET_MISC]({ commit }) {
+      const data = await this.$api.builder.fetchMisc();
+
+      commit(GET_MISC, data);
+    },
     [UPDATE_MISC]({ state, commit }, newValue) {
       commit(UPDATE_MISC, newValue);
+      localeStorageService.setJSON("misc", state.misc);
+    },
+    [UPDATE_COUNT_MISC]({ state, commit }, newValue) {
+      commit(UPDATE_COUNT_MISC, newValue);
       localeStorageService.setJSON("misc", state.misc);
     },
     [UPDATE_CART_ORDER]({ state, commit }, newValue) {

@@ -4,34 +4,48 @@
       <label class="cart-form__select">
         <span class="cart-form__label">Получение заказа:</span>
 
-        <select name="test" class="select" @change="onSelectChanged($event)">
-          <option value="1">Заберу сам</option>
-          <option value="2">Новый адрес</option>
-          <option v-if="user" value="3">Дом</option>
+        <select
+          ref="select"
+          name="test"
+          class="select"
+          @change="changeAddress($event.target.value)"
+        >
+          <option value="pickup">Заберу сам</option>
+          <option value="newAddress">Новый адрес</option>
+          <option
+            v-for="address in addresses"
+            :key="address.id"
+            :value="address.id"
+          >
+            {{ address.name }}
+          </option>
         </select>
       </label>
 
-      <label class="input input--big-label">
+      <label class="cart-form__phone input input--big-label">
         <span>Контактный телефон:</span>
-        <input
-          v-model="addressForm.phone"
+        <AppInput
+          v-model="phone"
           type="text"
           name="tel"
           placeholder="+7 999-999-99-99"
+          @change="setOrderAddress"
         />
       </label>
 
-      <div v-if="isAddressFormVisible" class="cart-form__address">
-        <span class="cart-form__label">Новый адрес:</span>
+      <div v-if="isAddressFormDisplayed" class="cart-form__address">
+        <span class="cart-form__label">{{ addressFormName }}:</span>
 
         <div class="cart-form__input">
           <label class="input">
             <span>Улица*</span>
-            <input
-              v-model="addressForm.street"
+            <AppInput
+              v-model="street"
               type="text"
               name="street"
-              :readonly="isAddressReadonly"
+              :disabled="isAddressDisabled"
+              :error-text="validations.street.error"
+              @change="setOrderAddress"
             />
           </label>
         </div>
@@ -39,11 +53,13 @@
         <div class="cart-form__input cart-form__input--small">
           <label class="input">
             <span>Дом*</span>
-            <input
-              v-model="addressForm.house"
+            <AppInput
+              v-model="building"
               type="text"
-              name="house"
-              :readonly="isAddressReadonly"
+              name="building"
+              :disabled="isAddressDisabled"
+              :error-text="validations.building.error"
+              @change="setOrderAddress"
             />
           </label>
         </div>
@@ -51,11 +67,12 @@
         <div class="cart-form__input cart-form__input--small">
           <label class="input">
             <span>Квартира</span>
-            <input
-              v-model="addressForm.apartment"
+            <AppInput
+              v-model="flat"
               type="text"
-              name="apartment"
-              :readonly="isAddressReadonly"
+              name="flat"
+              :disabled="isAddressDisabled"
+              @change="setOrderAddress"
             />
           </label>
         </div>
@@ -65,45 +82,121 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import AppInput from "@/common/components/AppInput";
+import { mapActions, mapState } from "vuex";
+import { validator } from "@/common/mixins";
+import { GET_ADDRESSES, RESET_ADDRESSES_STATE } from "@/store/mutation-types";
+
 export default {
-  name: "CartForm",
+  name: "CartOrderForm",
+  components: { AppInput },
+  mixins: [validator],
+
+  props: {
+    reorderAddressId: {
+      type: Number,
+      default: null,
+    },
+
+    validations: {
+      type: Object,
+      default: null,
+    },
+  },
+
   data() {
     return {
-      isAddressFormVisible: false,
-      isAddressReadonly: false,
-      addressForm: {
-        phone: "",
-        street: "",
-        house: "",
-        apartment: "",
-      },
+      deliveryOption: "pickup",
+      addressId: null,
+      phone: "",
+      street: "",
+      building: "",
+      flat: "",
+      comment: "",
+      addressFormName: "Новый адрес",
     };
   },
+
   computed: {
     ...mapState("auth", ["user"]),
+    ...mapState("addresses", ["addresses"]),
+
+    isAddressFormDisplayed() {
+      return this.deliveryOption !== "pickup";
+    },
+
+    isAddressDisabled() {
+      return this.deliveryOption !== "newAddress";
+    },
   },
+
+  watch: {
+    street() {
+      this.$clearValidationError("street");
+    },
+
+    building() {
+      this.$clearValidationError("building");
+    },
+  },
+
+  async created() {
+    if (this.user) {
+      this.phone = this.user.phone;
+      await this.GET_ADDRESSES();
+    } else if (this.addresses.length > 0) {
+      this.RESET_ADDRESSES_STATE();
+    }
+
+    if (this.reorderAddressId) {
+      this.$refs.select.value = this.reorderAddressId;
+      this.changeAddress(this.reorderAddressId);
+    }
+  },
+
   methods: {
-    onSelectChanged(event) {
-      switch (event.target.value) {
-        case "1":
-          this.isAddressFormVisible = false;
-          break;
-        case "2":
-          this.isAddressFormVisible = true;
-          this.isAddressReadonly = false;
-          this.addressForm.street = "";
-          this.addressForm.house = "";
-          this.addressForm.apartment = "";
-          break;
-        default:
-          this.isAddressFormVisible = true;
-          this.isAddressReadonly = true;
-          this.addressForm.street = "Вязов";
-          this.addressForm.house = "13";
-          this.addressForm.apartment = "13";
+    ...mapActions("addresses", [GET_ADDRESSES, RESET_ADDRESSES_STATE]),
+
+    changeAddress(value) {
+      this.deliveryOption = value;
+
+      if (value === "newAddress") {
+        this.addressId = null;
+        this.street = "";
+        this.building = "";
+        this.flat = "";
+        this.comment = "";
+        this.addressFormName = "Новый адрес";
+      } else if (value !== "pickup") {
+        const address = this.addresses.find((address) => address.id === +value);
+
+        this.addressId = address.id;
+        this.street = address.street;
+        this.building = address.building;
+        this.flat = address.flat;
+        this.comment = address.comment;
+        this.addressFormName = "Адрес";
       }
+
+      this.setOrderAddress();
+    },
+
+    setOrderAddress() {
+      const formAddress = {
+        id: this.addressId,
+        street: this.street,
+        building: this.building,
+        flat: this.flat,
+        comment: this.comment,
+      };
+
+      this.$emit("setAddress", {
+        phone: this.phone,
+        address: this.deliveryOption === "pickup" ? null : formAddress,
+      });
     },
   },
 };
 </script>
+
+<style lang="scss" scoped></style>
