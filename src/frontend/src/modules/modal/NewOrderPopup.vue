@@ -1,11 +1,11 @@
 <template>
   <div class="popup">
-    <a href="#" class="close">
-      <span
-        class="visually-hidden"
-        @click="$emit('closePopup', $event.target.value)"
-        >Закрыть попап</span
-      >
+    <a
+      href="#"
+      class="close"
+      @click.prevent="$emit('close', $event.target.value)"
+    >
+      <span class="visually-hidden">Закрыть попап</span>
     </a>
     <div class="popup__title">
       <h2 class="title">Спасибо за заказ</h2>

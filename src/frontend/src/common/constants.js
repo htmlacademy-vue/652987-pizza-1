@@ -117,3 +117,7 @@ export const MOVE = "move";
 export const TAG_SEPARATOR = "#";
 export const DATA_TRANSFER_PAYLOAD = "payload";
 export const MAX_COUNT_INGREDIENT = 3;
+export const MESSAGE_LIVE_TIME = 3000;
+
+/* eslint-disable */
+export const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

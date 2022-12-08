@@ -1,13 +1,3 @@
-import pizza from "@/static/pizza.json";
-
-import { normalizePizza } from "@/common/helpers.js";
-import {
-  DOUGH_TYPES,
-  INGREDIENT_TYPES,
-  SAUCE_TYPES,
-  SIZE_TYPES,
-} from "@/common/constants";
-
 import {
   SET_NAME_PIZZA,
   UPDATE_INGREDIENTS,
@@ -15,16 +5,20 @@ import {
   RESET_BUILDER_STATE,
   CHANGE_ORDER,
   CHANGE_INGREDIENTS,
+  GET_PIZZA_PARTS,
+  GET_PIZZA_DOUGHS,
+  GET_PIZZA_SAUCE,
+  GET_PIZZA_SIZE,
+  GET_PIZZA_INGREDIENTS,
+  CLEAR_NAME_PIZZA,
+  REPEAT_ORDER,
 } from "@/store/mutation-types";
 
 const initialState = () => ({
-  pizza,
-  doughs: pizza.dough.map((item) => normalizePizza(item, DOUGH_TYPES)),
-  sizes: pizza.sizes.map((item) => normalizePizza(item, SIZE_TYPES)),
-  sauces: pizza.sauces.map((item) => normalizePizza(item, SAUCE_TYPES)),
-  ingredients: pizza.ingredients.map((item) =>
-    normalizePizza(item, INGREDIENT_TYPES)
-  ),
+  doughs: [],
+  sizes: [],
+  sauces: [],
+  ingredients: [],
   order: {
     dough: 2,
     size: 1,
@@ -40,9 +34,6 @@ export default {
   namespaced: true,
   state: initialState(),
   getters: {
-    misc(state) {
-      return state.misc;
-    },
     doughs(state) {
       return state.doughs;
     },
@@ -54,9 +45,6 @@ export default {
     },
     ingredients(state) {
       return state.ingredients;
-    },
-    currentId(state) {
-      return state.order.id;
     },
     currentDough(state) {
       return state.order.dough;
@@ -84,7 +72,7 @@ export default {
         const doughPrice = state.doughs.filter(
           (item) => item.id === state.order.dough
         );
-        return doughPrice[0].price;
+        return doughPrice[0]?.price;
       }
 
       return 0;
@@ -94,7 +82,7 @@ export default {
         const saucePrice = state.sauces.filter(
           (item) => item.id === state.order.sauce
         );
-        return saucePrice[0].price;
+        return saucePrice[0]?.price;
       }
 
       return 0;
@@ -118,7 +106,7 @@ export default {
         const sizeMultiplier = state.sizes.filter(
           (item) => item.id === state.order.size
         );
-        return sizeMultiplier[0].multiplier;
+        return sizeMultiplier[0]?.multiplier;
       }
 
       return 0;
@@ -138,6 +126,9 @@ export default {
   mutations: {
     [SET_NAME_PIZZA](state, pizzaName) {
       state.order.pizzaName = pizzaName;
+    },
+    [CLEAR_NAME_PIZZA](state) {
+      state.order.pizzaName = "";
     },
     [UPDATE_ORDER](state, newValues) {
       newValues.filter((newValue) => {
@@ -174,6 +165,14 @@ export default {
       state.order.pizzaName = order.name;
       state.order.count = order.count;
     },
+    [REPEAT_ORDER](state, order) {
+      state.order.dough = order.dough;
+      state.order.size = order.size;
+      state.order.sauce = order.sauce;
+      state.order.ingredients = order.ingredients.slice(0);
+      state.order.pizzaName = order.name;
+      state.order.count = order.count;
+    },
     [CHANGE_INGREDIENTS](state, order) {
       order.ingredients.forEach((orderIngredient) => {
         state.ingredients.forEach((item) => {
@@ -182,6 +181,18 @@ export default {
           }
         });
       });
+    },
+    [GET_PIZZA_DOUGHS](state, doughs) {
+      state.doughs = doughs;
+    },
+    [GET_PIZZA_SAUCE](state, sauces) {
+      state.sauces = sauces;
+    },
+    [GET_PIZZA_SIZE](state, sizes) {
+      state.sizes = sizes;
+    },
+    [GET_PIZZA_INGREDIENTS](state, ingredients) {
+      state.ingredients = ingredients;
     },
   },
   actions: {
@@ -198,8 +209,22 @@ export default {
       commit(CHANGE_ORDER, order);
       commit(CHANGE_INGREDIENTS, order);
     },
+    [REPEAT_ORDER]({ commit }, order) {
+      commit(REPEAT_ORDER, order);
+    },
     [RESET_BUILDER_STATE]({ commit }) {
       commit(RESET_BUILDER_STATE, { root: true });
+    },
+    async [GET_PIZZA_PARTS]({ commit }) {
+      const dough = await this.$api.builder.fetchDough();
+      const sauces = await this.$api.builder.fetchSauces();
+      const sizes = await this.$api.builder.fetchSizes();
+      const ingredients = await this.$api.builder.fetchIngredients();
+      commit(CLEAR_NAME_PIZZA);
+      commit(GET_PIZZA_DOUGHS, dough);
+      commit(GET_PIZZA_SIZE, sizes);
+      commit(GET_PIZZA_SAUCE, sauces);
+      commit(GET_PIZZA_INGREDIENTS, ingredients);
     },
   },
 };

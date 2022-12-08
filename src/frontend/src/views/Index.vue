@@ -25,8 +25,6 @@
 </template>
 
 <script>
-import misc from "@/static/misc.json";
-import user from "@/static/user.json";
 import BuilderDoughSelector from "../modules/builder/components/BuilderDoughSelector";
 import BuilderSizeSelector from "../modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector";
@@ -41,12 +39,6 @@ export default {
     BuilderSizeSelector,
     BuilderIngredientsSelector,
     BuilderPizzaView,
-  },
-  data() {
-    return {
-      misc: misc,
-      user: user,
-    };
   },
   created() {
     this.setCartItems();
