@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import { prepareImage } from "@/common/helpers";
-
 export default {
   name: "OrdersAdditionalItem",
 
@@ -18,11 +16,6 @@ export default {
     item: {
       type: Object,
       required: true,
-    },
-  },
-  methods: {
-    formattedImage(data) {
-      return prepareImage(data);
     },
   },
 };

@@ -1,12 +1,13 @@
 <template>
   <section class="footer">
     <div class="footer__more">
-      <router-link
-        to="/"
+      <a
+        href="/"
         class="button button--border button--arrow"
         @click.prevent="$emit('click', $event.target.value)"
       >
-        Хочу еще одну</router-link>
+        Хочу еще одну
+      </a>
     </div>
     <p class="footer__text">
       Перейти к конструктору<br />чтоб собрать ещё одну пиццу
