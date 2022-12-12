@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <AppLayout :price="totalCartPrice" :userData="userData">
-      <router-view />
+      <transition name="slide" mode="out-in" :appear="isAnimated">
+        <router-view />
+      </transition>
     </AppLayout>
   </div>
 </template>
@@ -21,6 +23,9 @@ export default {
   },
   computed: {
     ...mapGetters("cart", ["totalCartPrice"]),
+    isAnimated() {
+      return this.$route.name !== "Login";
+    },
   },
   created() {
     if (this.$jwt.getToken()) {
@@ -33,4 +38,17 @@ export default {
 
 <style lang="scss">
 @import "~@/assets/scss/app";
+
+.slide-enter-active {
+  transition: all 0.4s;
+}
+.slide-enter {
+  opacity: 0;
+  margin-left: 90px;
+}
+.slide-leave-active {
+  transition: all 0.4s;
+  opacity: 0;
+  margin-left: -100px;
+}
 </style>

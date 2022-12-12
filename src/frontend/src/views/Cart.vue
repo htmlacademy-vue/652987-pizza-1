@@ -27,12 +27,14 @@
       </div>
     </main>
 
-    <CartFooter v-if="!isCartEmpty" @click="RESET_BUILDER_STATE" />
-    <NewOrderPopup
-      v-if="showNewOrderPopup"
-      @click="placeOrder"
-      @close="closePopup"
-    />
+    <CartFooter v-if="!isCartEmpty" @click="addNewPizza" />
+    <transition name="fade">
+      <NewOrderPopup
+        v-if="showNewOrderPopup"
+        @click="placeOrder"
+        @close="closePopup"
+      />
+    </transition>
   </form>
 </template>
 
@@ -190,8 +192,23 @@ export default {
       this.phone = phone;
       this.address = address;
     },
+
+    addNewPizza() {
+      this.RESET_BUILDER_STATE();
+      this.GET_PIZZA_PARTS();
+      this.$router.push("/");
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
