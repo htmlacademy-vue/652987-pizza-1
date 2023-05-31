@@ -28,6 +28,7 @@
         :inputName="card.name"
         :counter-value="card.count"
         :id="index"
+        data-test="cart-cards-counter"
         @updateOrder="updateAmount"
       />
 
@@ -39,6 +40,7 @@
         <button
           type="button"
           class="cart-list__edit"
+          data-test="cart-cards-edit"
           @click="goToPizzaBuilder(card)"
         >
           Изменить

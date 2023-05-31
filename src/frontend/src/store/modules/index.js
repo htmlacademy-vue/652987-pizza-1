@@ -1,5 +1,5 @@
 // Automatically imports all the modules and exports as a single module object
-const requireContext = require.context("@/store/modules", true, /store\.js$/);
+const requireContext = require.context("../modules", true, /store\.js$/);
 const modules = {};
 
 requireContext.keys().forEach((file) => {

@@ -11,17 +11,36 @@
       />
     </label>
 
-    <AppDrop @drop="onDrop" class="content__constructor">
+    <AppDrop
+      @drop="onDrop"
+      class="content__constructor"
+      data-test="pizza-wrapper"
+    >
       <div
         :class="`pizza pizza--foundation--${currentDoughClass}-${currentSauceClass}`"
       >
         <div class="pizza__wrapper">
           <transition-group name="ingredient">
-            <div
-              v-for="item in order.ingredients"
-              :key="`${item.name}-${item.count}`"
-              :class="['pizza__filling', `pizza__filling--${item.value}`]"
-            ></div>
+            <div v-for="ingredient in order.ingredients" :key="ingredient.id">
+              <div
+                class="pizza__filling"
+                :class="`pizza__filling--${ingredient.value}`"
+              />
+              <transition name="ingredient-second">
+                <div
+                  v-if="ingredient.count >= 2"
+                  class="pizza__filling pizza__filling--second"
+                  :class="`pizza__filling--${ingredient.value}`"
+                />
+              </transition>
+              <transition name="ingredient-third">
+                <div
+                  v-if="ingredient.count === 3"
+                  class="pizza__filling pizza__filling--third"
+                  :class="`pizza__filling--${ingredient.value}`"
+                />
+              </transition>
+            </div>
           </transition-group>
         </div>
       </div>
@@ -69,13 +88,28 @@ export default {
 
 <style lang="scss" scoped>
 .ingredient-enter-active,
-.ingredient-leave-active {
+.ingredient-second-enter-active,
+.ingredient-third-enter-active,
+.ingredient-leave-active,
+.ingredient-second-leave-active,
+.ingredient-third-leave-active {
   transition: all 0.5s;
 }
 
 .ingredient-enter,
-.ingredient-leave-to {
+.ingredient-second-enter,
+.ingredient-third-enter,
+.ingredient-leave-to,
+.ingredient-second-leave-to,
+.ingredient-third-leave-to {
   opacity: 0;
 }
 
+.ingredient-second-enter {
+  transform: rotate(15deg);
+}
+
+.ingredient-third-enter {
+  transform: rotate(-15deg);
+}
 </style>

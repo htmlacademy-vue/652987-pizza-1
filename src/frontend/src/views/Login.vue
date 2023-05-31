@@ -1,6 +1,6 @@
 <template>
   <div class="sign-form">
-    <a class="close close--white" @click="closeDialog">
+    <a class="close close--white" data-test="close-button" @click="closeDialog">
       <span class="visually-hidden">Закрыть форму авторизации</span>
     </a>
     <div class="sign-form__title">

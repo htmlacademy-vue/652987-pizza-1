@@ -73,6 +73,7 @@
         v-if="isAddressEdited"
         type="button"
         class="button button--transparent"
+        data-test="delete-button"
         @click="deleteAddress"
       >
         Удалить

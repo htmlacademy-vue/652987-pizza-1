@@ -5,19 +5,21 @@
         <h1 class="title title--big">Конструктор пиццы</h1>
 
         <div class="content__dough">
-          <BuilderDoughSelector />
+          <BuilderDoughSelector data-test="builder-doug-selector" />
         </div>
 
         <div class="content__diameter">
-          <BuilderSizeSelector />
+          <BuilderSizeSelector data-test="builder-size-selector" />
         </div>
 
         <div class="content__ingredients">
-          <BuilderIngredientsSelector />
+          <BuilderIngredientsSelector
+            data-test="builder-ingredients-selector"
+          />
         </div>
 
         <div class="content__pizza">
-          <BuilderPizzaView />
+          <BuilderPizzaView data-test="builder-pizza-view" />
         </div>
       </div>
     </form>
@@ -25,10 +27,10 @@
 </template>
 
 <script>
-import BuilderDoughSelector from "../modules/builder/components/BuilderDoughSelector";
-import BuilderSizeSelector from "../modules/builder/components/BuilderSizeSelector";
-import BuilderIngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector";
-import BuilderPizzaView from "../modules/builder/components/BuilderPizzaView";
+import BuilderDoughSelector from "@/modules/builder/BuilderDoughSelector.vue";
+import BuilderSizeSelector from "@/modules/builder/BuilderSizeSelector.vue";
+import BuilderIngredientsSelector from "@/modules/builder/BuilderIngredientsSelector.vue";
+import BuilderPizzaView from "@/modules/builder/BuilderPizzaView.vue";
 import { mapActions } from "vuex";
 import { SET_CART_ITEMS } from "@/store/mutation-types";
 

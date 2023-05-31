@@ -4,6 +4,7 @@
       <a
         href="/"
         class="button button--border button--arrow"
+        data-test="builder-page-link"
         @click.prevent="$emit('click', $event.target.value)"
       >
         Хочу еще одну

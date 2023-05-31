@@ -92,7 +92,12 @@ export default {
         }
       });
     },
-    [SET_CART_ITEMS](state) {
+    [SET_CART_ITEMS](state, orders) {
+      if (orders) {
+        state.orders = orders;
+        return;
+      }
+
       state.orders = localeStorageService.getJSON("orders");
       if (localStorage.getItem("misc") !== null) {
         state.misc = localeStorageService.getJSON("misc");

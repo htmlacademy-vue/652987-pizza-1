@@ -10,15 +10,17 @@
       <ProfileAddressForm
         v-if="address.id === editableAddressId"
         :address="address"
+        data-test="address-form"
       />
 
-      <div v-else class="sheet address-form">
+      <div v-else class="sheet address-form" data-test="address-card">
         <div class="address-form__header">
           <b>Адрес №{{ address.id }}. {{ address.name }}</b>
           <div class="address-form__edit">
             <button
               type="button"
               class="icon"
+              data-test="edit-address-button"
               @click="openFormToEdit(address.id)"
             >
               <span class="visually-hidden">Изменить адрес</span>
@@ -31,13 +33,17 @@
     </div>
 
     <div v-if="isNewAddressFormDisplayed" class="layout__address">
-      <ProfileAddressForm :address="newAddressData" />
+      <ProfileAddressForm
+        :address="newAddressData"
+        data-test="new-address-form"
+      />
     </div>
 
     <div class="layout__button">
       <button
         type="button"
         class="button button--border"
+        data-test="add-address-button"
         @click="openNewAddressForm"
       >
         Добавить новый адрес
@@ -50,8 +56,12 @@
 import ProfileUserBlock from "@/modules/profile/components/ProfileUserBlock";
 import ProfileAddressForm from "@/modules/profile/components/ProfileAddressForm";
 import { mapActions, mapState } from "vuex";
-import {GET_ADDRESSES, GET_MISC, SET_CART_ITEMS} from "@/store/mutation-types";
-import {localeStorageService} from "@/services/localeStorage";
+import {
+  GET_ADDRESSES,
+  GET_MISC,
+  SET_CART_ITEMS,
+} from "@/store/mutation-types";
+import { localeStorageService } from "@/services/localeStorage";
 
 export default {
   name: "Profile",
