@@ -16,6 +16,8 @@
             v-for="address in addresses"
             :key="address.id"
             :value="address.id"
+            :selected="addressId === address.id"
+            data-test="user-address"
           >
             {{ address.name }}
           </option>

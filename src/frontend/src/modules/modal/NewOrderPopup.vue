@@ -3,6 +3,7 @@
     <a
       href="#"
       class="close"
+      data-test="close-button"
       @click.prevent="$emit('close', $event.target.value)"
     >
       <span class="visually-hidden">Закрыть попап</span>
@@ -15,6 +16,7 @@
       <a
         href="#"
         class="button"
+        data-test="popup-button"
         @click.prevent="$emit('click', $event.target.value)"
         >Отлично, я жду!</a
       >

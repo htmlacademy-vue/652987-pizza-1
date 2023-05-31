@@ -11,26 +11,36 @@
           <h1 class="title title--big">Корзина</h1>
         </div>
 
-        <div v-if="isCartEmpty" class="sheet cart__empty">
+        <div
+          v-if="isCartEmpty"
+          class="sheet cart__empty"
+          data-test="cart-empty"
+        >
           <p>В корзине нет ни одного товара</p>
         </div>
 
-        <div v-else>
-          <CartsCards :cards="orders" />
+        <div v-else data-test="cart-items">
+          <CartCards :cards="orders" />
           <CartAdditional />
           <CartForm
             :reorder-address-id="addressId"
             :validations="validations"
+            data-test="order-form"
             @setAddress="setAddress"
           />
         </div>
       </div>
     </main>
 
-    <CartFooter v-if="!isCartEmpty" @click="addNewPizza" />
+    <CartFooter
+      v-if="!isCartEmpty"
+      @click="addNewPizza"
+      data-test="cart-footer"
+    />
     <transition name="fade">
       <NewOrderPopup
         v-if="showNewOrderPopup"
+        data-test="success-popup"
         @click="placeOrder"
         @close="closePopup"
       />
@@ -40,7 +50,7 @@
 
 <script>
 import CartFooter from "@/modules/cart/CartFooter";
-import CartsCards from "@/modules/cart/CartsCards";
+import CartCards from "@/modules/cart/CartCards";
 import CartAdditional from "@/modules/cart/CartAdditional";
 import CartForm from "@/modules/cart/CartForm";
 import NewOrderPopup from "@/modules/modal/NewOrderPopup";
@@ -61,7 +71,7 @@ export default {
   mixins: [validator],
   components: {
     CartFooter,
-    CartsCards,
+    CartCards,
     CartAdditional,
     CartForm,
     NewOrderPopup,

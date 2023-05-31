@@ -4,6 +4,7 @@
     <button
       type="button"
       class="button"
+      data-test="add-to-cart-btn"
       :disabled="isDisabledButton"
       @click="sendOrder"
     >

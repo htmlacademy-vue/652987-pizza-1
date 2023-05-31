@@ -13,13 +13,19 @@
         <button
           type="button"
           class="button button--border"
+          data-test="delete-btn"
           @click="deleteOrder(order.id)"
         >
           Удалить
         </button>
       </div>
       <div class="order__button">
-        <button type="button" class="button" @click="repeatOrder(order)">
+        <button
+          type="button"
+          class="button"
+          data-test="repeat-btn"
+          @click="repeatOrder(order)"
+        >
           Повторить
         </button>
       </div>
@@ -49,7 +55,7 @@
 import { mapActions, mapGetters } from "vuex";
 import { getItemById, getOrderPrice } from "@/common/helpers";
 import PizzaItem from "@/common/components/PizzaItem";
-import OrdersAdditionalItem from "./OrdersAdditionalItem";
+import OrdersAdditionalItem from "@/modules/orders/OrdersAdditionalItem.vue";
 import {
   ADD_TO_CART,
   DELETE_ORDER,

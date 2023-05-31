@@ -13,6 +13,7 @@
           :name="`sauce`"
           :params="sauce"
           :checked="order.sauce === sauce.id"
+          data-test="sauce-input"
           @selected="updateOrder(sauce, 'sauce')"
         >
           <span>{{ sauce.name }}</span>
@@ -27,6 +28,7 @@
             class="ingredients__item"
             v-for="item in ingredients"
             :key="item.id"
+            data-test="ingredients-item"
           >
             <AppDrag
               :transfer-data="item"
@@ -42,6 +44,7 @@
               :inputName="item.value"
               :id="item.id"
               :counter-value="item.count"
+              data-test="ingredients-counter"
               @updateOrder="updateIngredients"
             />
           </li>

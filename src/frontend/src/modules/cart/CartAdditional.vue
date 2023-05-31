@@ -25,6 +25,7 @@
             :counter-value="item.count"
             :id="item.id"
             @updateOrder="updateMics"
+            data-test="additional-list-counter"
           />
 
           <div class="additional-list__price">
