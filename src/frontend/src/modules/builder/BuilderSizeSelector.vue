@@ -26,13 +26,17 @@ import { UPDATE_ORDER } from "@/store/mutation-types";
 
 export default {
   name: "BuilderSizeSelector",
+
   components: { RadioButton },
+
   computed: {
     ...mapState("builder", ["order"]),
     ...mapGetters("builder", ["sizes"]),
   },
+
   methods: {
     ...mapActions("builder", [UPDATE_ORDER]),
+
     updateOrder(selected, type) {
       this.UPDATE_ORDER([
         {

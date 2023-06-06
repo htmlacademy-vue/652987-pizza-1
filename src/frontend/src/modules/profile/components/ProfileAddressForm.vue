@@ -95,7 +95,9 @@ import {
 
 export default {
   name: "ProfileAddressesForm",
+
   components: { AppInput },
+
   mixins: [validator],
 
   props: {
@@ -197,6 +199,7 @@ export default {
 
       $event.target.submit();
     },
+
     deleteAddress() {
       this.DELETE_ADDRESS(this.address.id);
     },

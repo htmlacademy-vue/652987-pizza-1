@@ -91,7 +91,9 @@ import { GET_ADDRESSES, RESET_ADDRESSES_STATE } from "@/store/mutation-types";
 
 export default {
   name: "CartOrderForm",
+
   components: { AppInput },
+
   mixins: [validator],
 
   props: {

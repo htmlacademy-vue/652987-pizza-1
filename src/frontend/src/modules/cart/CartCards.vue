@@ -61,16 +61,20 @@ import {
 
 export default {
   name: "CartCards",
+
   components: { ItemCounter },
+
   props: {
     cards: {
       type: Array,
       default: () => [],
     },
   },
+
   methods: {
     ...mapActions("cart", [UPDATE_CART_ORDER, DELETE_ITEM_CART]),
     ...mapActions("builder", [CHANGE_ORDER]),
+
     updateAmount(event) {
       this.UPDATE_CART_ORDER({
         id: event.id,
@@ -79,10 +83,12 @@ export default {
       });
       this.DELETE_ITEM_CART();
     },
+
     goToPizzaBuilder(pizza) {
       this.CHANGE_ORDER(pizza);
       this.$router.push("/");
     },
+
     getSizeText(size) {
       switch (size) {
         case 1:
@@ -93,6 +99,7 @@ export default {
           return "45 см";
       }
     },
+
     getDoughText(dough) {
       switch (dough) {
         case 1:
@@ -101,6 +108,7 @@ export default {
           return "на толстом тесте";
       }
     },
+
     getSauceText(sauce) {
       switch (sauce) {
         case 1:
@@ -109,6 +117,7 @@ export default {
           return "сливочный";
       }
     },
+
     getIngredientsList(ingredients) {
       return ingredients.map((item) => item.name.toLowerCase()).join(", ");
     },

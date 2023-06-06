@@ -45,18 +45,23 @@ import { prepareImage } from "@/common/helpers";
 import { UPDATE_MISC } from "@/store/mutation-types";
 export default {
   name: "CartAdditional",
+
   components: { ItemCounter },
+
   computed: {
     ...mapGetters("cart", ["misc"]),
   },
+
   methods: {
     ...mapActions("cart", [UPDATE_MISC]),
+
     updateMics(event) {
       this.UPDATE_MISC({
         id: event.id,
         count: event.count,
       });
     },
+
     formattedImage(data) {
       return prepareImage(data);
     },

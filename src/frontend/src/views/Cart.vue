@@ -67,8 +67,10 @@ import {
 } from "@/store/mutation-types";
 
 export default {
-  name: "Cart",
+  name: "CartPage",
+
   mixins: [validator],
+
   components: {
     CartFooter,
     CartCards,
@@ -76,6 +78,7 @@ export default {
     CartForm,
     NewOrderPopup,
   },
+
   data() {
     return {
       showNewOrderPopup: false,
@@ -94,13 +97,16 @@ export default {
       },
     };
   },
+
   computed: {
     ...mapState("auth", ["user"]),
     ...mapGetters("cart", ["orders", "misc"]),
+
     isCartEmpty() {
       return this.orders.length === 0;
     },
   },
+
   watch: {
     isCartEmpty(val) {
       if (val) {
@@ -109,14 +115,18 @@ export default {
       }
     },
   },
+
   async created() {
     this.addressId = this.$route.params.addressId;
+
     const arrayMisc = localeStorageService.getJSON("misc");
     if (!arrayMisc.length) {
       this.GET_MISC();
     }
+
     this.setCartItems();
   },
+
   methods: {
     ...mapActions("builder", [RESET_BUILDER_STATE, GET_PIZZA_PARTS]),
     ...mapActions("cart", [RESET_CART_STATE, SET_CART_ITEMS, GET_MISC]),
@@ -195,9 +205,11 @@ export default {
       this.RESET_CART_STATE();
       await this.GET_PIZZA_PARTS();
     },
+
     closePopup() {
       this.showNewOrderPopup = false;
     },
+
     setAddress({ phone, address }) {
       this.phone = phone;
       this.address = address;

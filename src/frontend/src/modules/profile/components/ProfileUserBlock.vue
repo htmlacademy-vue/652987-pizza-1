@@ -22,9 +22,11 @@ import AppPicture from "@/common/components/AppPicture";
 
 export default {
   name: "ProfileUserBlock",
+
   components: {
     AppPicture,
   },
+
   computed: {
     ...mapState("auth", ["user"]),
   },

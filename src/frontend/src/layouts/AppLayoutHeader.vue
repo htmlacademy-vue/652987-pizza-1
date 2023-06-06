@@ -53,10 +53,13 @@ import AppPicture from "@/common/components/AppPicture";
 
 export default {
   name: "AppLayoutHeader",
+
   mixins: [logout],
+
   components: {
     AppPicture,
   },
+
   computed: {
     ...mapState("auth", ["user"]),
     ...mapGetters("cart", ["totalCartPrice"]),

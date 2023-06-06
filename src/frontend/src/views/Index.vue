@@ -35,18 +35,22 @@ import { mapActions } from "vuex";
 import { SET_CART_ITEMS } from "@/store/mutation-types";
 
 export default {
-  name: "Index",
+  name: "IndexPage",
+
   components: {
     BuilderDoughSelector,
     BuilderSizeSelector,
     BuilderIngredientsSelector,
     BuilderPizzaView,
   },
+
   created() {
     this.setCartItems();
   },
+
   methods: {
     ...mapActions("cart", [SET_CART_ITEMS]),
+
     setCartItems() {
       this.SET_CART_ITEMS();
     },

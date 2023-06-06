@@ -64,7 +64,8 @@ import {
 import { localeStorageService } from "@/services/localeStorage";
 
 export default {
-  name: "Profile",
+  name: "ProfilePage",
+
   components: {
     ProfileAddressForm,
     ProfileUserBlock,
@@ -96,10 +97,12 @@ export default {
 
   async created() {
     await this.GET_ADDRESSES();
+
     const arrayMisc = localeStorageService.getJSON("misc");
     if (!arrayMisc.length) {
       this.GET_MISC();
     }
+
     this.SET_CART_ITEMS();
   },
 

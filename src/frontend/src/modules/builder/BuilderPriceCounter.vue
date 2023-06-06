@@ -23,12 +23,15 @@ import {
 
 export default {
   name: "BuilderPriceCounter",
+
   computed: {
     ...mapGetters("builder", ["isDisabledButton", "totalPrice"]),
   },
+
   methods: {
     ...mapActions("cart", [ADD_TO_CART]),
     ...mapActions("builder", [GET_PIZZA_PARTS, RESET_BUILDER_STATE]),
+
     sendOrder() {
       this.ADD_TO_CART();
       this.RESET_BUILDER_STATE();

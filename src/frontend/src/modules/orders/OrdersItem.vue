@@ -67,6 +67,7 @@ import {
 
 export default {
   name: "OrdersItem",
+
   components: { PizzaItem, OrdersAdditionalItem },
 
   props: {
@@ -105,6 +106,7 @@ export default {
       return getOrderPrice(this.pizzas, this.miscFormat);
     },
   },
+
   methods: {
     ...mapActions("orders", [DELETE_ORDER]),
     ...mapActions("cart", [ADD_TO_CART, UPDATE_COUNT_MISC]),
@@ -113,9 +115,11 @@ export default {
       RESET_BUILDER_STATE,
       GET_PIZZA_PARTS,
     ]),
+
     deleteOrder(id) {
       this.DELETE_ORDER(id);
     },
+
     getPizzaPrice(pizza) {
       const doughPrice = getItemById(this.doughs, pizza.doughId)?.price;
       const saucePrice = getItemById(this.sauces, pizza.sauceId)?.price;
@@ -136,6 +140,7 @@ export default {
         ? `${pizza.quantity}х${pizza.price}`
         : pizza.price;
     },
+
     repeatOrder(order) {
       order.orderPizzas.forEach((item) => {
         const formattedIngredients = [];

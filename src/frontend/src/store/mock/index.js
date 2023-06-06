@@ -13,7 +13,6 @@ import {
   SIZE_TYPES,
 } from "@/common/constants";
 import { normalizePizza } from "@/common/helpers";
-import { GET_ORDERS } from "@/store/mutation-types";
 
 const initState = () => ({
   notifications: [],

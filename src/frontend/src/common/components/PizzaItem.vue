@@ -37,6 +37,7 @@ export default {
   computed: {
     ...mapState("builder", ["dough", "sauces", "sizes", "ingredients"]),
   },
+
   methods: {
     getSizeText(size) {
       switch (size) {
@@ -48,6 +49,7 @@ export default {
           return "45 см";
       }
     },
+
     getDoughText(dough) {
       switch (dough) {
         case 1:
@@ -56,6 +58,7 @@ export default {
           return "на толстом тесте";
       }
     },
+
     getSauceText(sauce) {
       switch (sauce) {
         case 1:
@@ -64,6 +67,7 @@ export default {
           return "сливочный";
       }
     },
+
     getIngredientsText(ingredients) {
       const names = ingredients.map((ingredient) => {
         return getItemById(this.ingredients, ingredient.ingredientId)?.name;

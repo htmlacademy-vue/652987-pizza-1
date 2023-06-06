@@ -27,13 +27,17 @@ import { UPDATE_ORDER } from "@/store/mutation-types";
 
 export default {
   name: "BuilderDoughSelector",
+
   components: { RadioButton },
+
   computed: {
     ...mapState("builder", ["order"]),
     ...mapGetters("builder", ["doughs"]),
   },
+
   methods: {
     ...mapActions("builder", [UPDATE_ORDER]),
+
     updateOrder(selected, type) {
       this.UPDATE_ORDER([
         {
