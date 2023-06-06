@@ -44,9 +44,12 @@ import { mapActions } from "vuex";
 import { validator } from "@/common/mixins";
 
 export default {
-  name: "Login",
+  name: "LoginPage",
+
   components: { AppInput },
+
   mixins: [validator],
+
   data() {
     return {
       email: "",
@@ -63,6 +66,7 @@ export default {
       },
     };
   },
+
   watch: {
     email() {
       this.$clearValidationError("email");
@@ -76,6 +80,7 @@ export default {
   mounted() {
     this.$refs.email.$refs.input.focus();
   },
+
   methods: {
     ...mapActions("auth", ["LOGIN"]),
 

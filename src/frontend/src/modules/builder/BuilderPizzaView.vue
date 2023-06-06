@@ -58,10 +58,12 @@ import { SET_NAME_PIZZA, UPDATE_INGREDIENTS } from "@/store/mutation-types";
 
 export default {
   name: "BuilderPizzaView",
+
   components: {
     BuilderPriceCounter,
     AppDrop,
   },
+
   computed: {
     ...mapState("builder", ["order"]),
     ...mapGetters("builder", [
@@ -70,11 +72,14 @@ export default {
       "currentSauceClass",
     ]),
   },
+
   methods: {
     ...mapActions("builder", [SET_NAME_PIZZA, UPDATE_INGREDIENTS]),
+
     updatePizzaName(event) {
       this.SET_NAME_PIZZA(event.target.value);
     },
+
     onDrop(event) {
       let newCount = (event.count += 1);
       this.UPDATE_INGREDIENTS({

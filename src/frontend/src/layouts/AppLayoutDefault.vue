@@ -12,6 +12,7 @@ import Notifications from "@/common/components/Notifications";
 
 export default {
   name: "AppLayoutDefault",
+
   components: {
     AppLayoutHeader,
     Notifications,

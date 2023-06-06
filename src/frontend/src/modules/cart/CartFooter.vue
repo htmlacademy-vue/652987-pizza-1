@@ -28,6 +28,7 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "CartFooter",
+
   computed: {
     ...mapGetters("cart", ["totalCartPrice"]),
   },

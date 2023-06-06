@@ -14,23 +14,29 @@ import { mapGetters } from "vuex";
 import { setAuth } from "@/common/helpers";
 
 export default {
-  name: "App",
+  name: "AppPage",
+
   components: { AppLayout },
+
   data() {
     return {
       userData: true,
     };
   },
+
   computed: {
     ...mapGetters("cart", ["totalCartPrice"]),
+
     isAnimated() {
       return this.$route.name !== "Login";
     },
   },
+
   created() {
     if (this.$jwt.getToken()) {
       setAuth(this.$store);
     }
+
     this.$store.dispatch("builder/GET_PIZZA_PARTS");
   },
 };

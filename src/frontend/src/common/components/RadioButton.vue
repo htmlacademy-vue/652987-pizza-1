@@ -15,23 +15,28 @@
 <script>
 export default {
   name: "RadioButton",
+
   props: {
     checked: {
       type: Boolean,
       default: false,
     },
+
     params: {
       type: Object,
       required: true,
     },
+
     classRadioInput: {
       type: String,
       required: false,
     },
+
     classRadioLabel: {
       type: String,
       required: false,
     },
+
     name: {
       type: String,
       required: true,

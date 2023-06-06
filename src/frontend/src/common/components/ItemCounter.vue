@@ -34,31 +34,38 @@
 <script>
 export default {
   name: "ItemCounter",
+
   props: {
     classCounter: {
       type: String,
       required: true,
     },
+
     orangeBtn: {
       type: Boolean,
       default: false,
     },
+
     inputName: {
       type: String,
     },
+
     maxValue: {
       type: Number,
       default: 3,
     },
+
     counterValue: {
       type: Number,
       default: 0,
     },
+
     id: {
       type: Number,
       default: null,
     },
   },
+
   methods: {
     changeCounter(event) {
       let counterValue = this.counterValue;

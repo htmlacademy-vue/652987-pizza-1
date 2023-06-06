@@ -64,22 +64,27 @@ import { UPDATE_INGREDIENTS, UPDATE_ORDER } from "@/store/mutation-types";
 
 export default {
   name: "BuilderIngredientsSelector",
+
   components: {
     RadioButton,
     ItemCounter,
     AppDrag,
   },
+
   data() {
     return {
       MAX_COUNT_INGREDIENT,
     };
   },
+
   computed: {
     ...mapState("builder", ["order"]),
     ...mapGetters("builder", ["ingredients", "sauces"]),
   },
+
   methods: {
     ...mapActions("builder", [UPDATE_INGREDIENTS, UPDATE_ORDER]),
+
     updateIngredients(event) {
       const updateItem = this.ingredients.find((id) => id === event.id);
       if (updateItem) {
@@ -90,6 +95,7 @@ export default {
         count: event.count,
       });
     },
+
     updateOrder(selected, type) {
       this.UPDATE_ORDER([
         {

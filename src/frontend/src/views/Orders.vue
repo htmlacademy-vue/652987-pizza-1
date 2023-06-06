@@ -33,10 +33,12 @@ import {
 import { localeStorageService } from "@/services/localeStorage";
 
 export default {
-  name: "Orders",
+  name: "OrdersPage",
+
   components: {
     OrdersItem,
   },
+
   computed: {
     ...mapState("cart", ["misc"]),
     ...mapState("orders", ["orders"]),
@@ -45,17 +47,22 @@ export default {
       return this.orders.length === 0;
     },
   },
+
   methods: {
     ...mapActions("builder", [GET_PIZZA_PARTS]),
     ...mapActions("orders", [GET_ORDERS]),
     ...mapActions("cart", [GET_MISC, SET_CART_ITEMS]),
   },
+
   async created() {
     this.GET_ORDERS();
+
     const arrayMisc = localeStorageService.getJSON("misc");
+
     if (!arrayMisc.length) {
       this.GET_MISC();
     }
+
     this.SET_CART_ITEMS();
   },
 };
